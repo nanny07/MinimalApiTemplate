@@ -1,16 +1,25 @@
 ﻿using FluentValidation;
-using MinimapApiTemplate.BLL.Model;
+using Microsoft.Extensions.Logging;
+using MinimalApiTemplate.DAL;
+using MinimapApiTemplate.BLL.Services.Common;
+using MinimapApiTemplate.Shared.Model;
 
 namespace MinimapApiTemplate.BLL.Services
 {
-    public class PeopleService : IPeopleService
+    public class PeopleService : BaseService, IPeopleService
     {
+        private readonly GenericContext dataContext;
+        private readonly ILogger<PeopleService> logger;
         private readonly IValidator<Person> validator;
 
-        public PeopleService(IValidator<Person> validator)
+        public PeopleService(GenericContext dataContext, ILogger<PeopleService> logger, IValidator<Person> validator) 
+            : base(dataContext, logger)
         {
+            this.dataContext = dataContext;
+            this.logger = logger;
             this.validator = validator;
         }
+
         public async Task<IEnumerable<Person>> GetListAsync()
         {
             var peopleList = new List<Person>() {

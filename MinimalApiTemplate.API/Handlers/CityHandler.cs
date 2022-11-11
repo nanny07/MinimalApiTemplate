@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using MinimalApiTemplate.API.Helpers;
 using MinimalApiTemplate.Routing;
-using MinimapApiTemplate.BLL.Model;
 using MinimapApiTemplate.BLL.Services;
-using MinimapApiTemplate.BLL.Validations;
+using MinimapApiTemplate.Shared.Model;
 using System.Net.Mime;
 
 namespace MinimalApiTemplate.Handlers

@@ -1,9 +1,23 @@
-﻿using MinimapApiTemplate.BLL.Model;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using MinimalApiTemplate.DAL;
+using MinimapApiTemplate.BLL.Services.Common;
+using MinimapApiTemplate.Shared.Model;
 
 namespace MinimapApiTemplate.BLL.Services
 {
-    public class CityService : ICityService
+    public class CityService : BaseService, ICityService
     {
+        private readonly GenericContext dataContext;
+        private readonly ILogger<CityService> logger;
+
+        public CityService(GenericContext dataContext, ILogger<CityService> logger)
+            : base(dataContext, logger)
+        {
+            this.dataContext = dataContext;
+            this.logger = logger;
+        }
+
         public async Task<IEnumerable<City>> GetListAsync()
         {
             var cityList = new List<City>() {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MinimalApiTemplate.API.Helpers;
 using MinimalApiTemplate.Routing;
-using MinimapApiTemplate.BLL.Model;
+using MinimapApiTemplate.Shared.Model;
 using MinimapApiTemplate.BLL.Services;
 using System.Net.Mime;
 

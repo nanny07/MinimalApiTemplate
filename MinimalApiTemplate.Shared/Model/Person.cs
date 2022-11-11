@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace MinimapApiTemplate.BLL.Model
+﻿namespace MinimapApiTemplate.Shared.Model
 {
     public class Person
     {

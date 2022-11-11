@@ -1,4 +1,4 @@
-﻿using MinimapApiTemplate.BLL.Model;
+﻿using MinimapApiTemplate.Shared.Model;
 
 namespace MinimapApiTemplate.BLL.Services
 {
