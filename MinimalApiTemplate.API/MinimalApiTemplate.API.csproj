@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MinimalApiTemplate.DAL\MinimalApiTemplate.DAL.csproj" />
-    <ProjectReference Include="..\MinimapApiTemplate.BLL\MinimapApiTemplate.BLL.csproj" />
+    <ProjectReference Include="..\MinimalApiTemplate.BLL\MinimalApiTemplate.BLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

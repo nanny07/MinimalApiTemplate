@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalApiTemplate.API", "MinimalApiTemplate.API\MinimalApiTemplate.API.csproj", "{BAB18B43-1FB2-49CA-B5D9-79EF3AB6F1CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimapApiTemplate.BLL", "MinimapApiTemplate.BLL\MinimapApiTemplate.BLL.csproj", "{06E7CD54-E143-4BFE-84F6-7E0E4FC716C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalApiTemplate.BLL", "MinimalApiTemplate.BLL\MinimalApiTemplate.BLL.csproj", "{06E7CD54-E143-4BFE-84F6-7E0E4FC716C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalApiTemplate.DAL", "MinimalApiTemplate.DAL\MinimalApiTemplate.DAL.csproj", "{BC493AF7-F5BD-43DF-93EA-E5AC48A97A83}"
 EndProject
