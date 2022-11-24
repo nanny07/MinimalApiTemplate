@@ -22,6 +22,7 @@ namespace MinimalApiTemplate.Handlers
                 .Accepts<Person>(MediaTypeNames.Application.Json)
                 .Produces<Guid>(statusCode: StatusCodes.Status200OK)
                 .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status404NotFound)
                 .Produces(StatusCodes.Status500InternalServerError);
 
@@ -29,6 +30,7 @@ namespace MinimalApiTemplate.Handlers
                 .Accepts<Person>(MediaTypeNames.Application.Json)
                 .Produces<Guid>(statusCode: StatusCodes.Status200OK)
                 .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status500InternalServerError);
 
             app.MapDelete("/api/people/{id:guid}", DeleteAsync)
@@ -57,6 +59,10 @@ namespace MinimalApiTemplate.Handlers
                 var res = await peopleService.InsertAsync(person: person);
                 return Results.Ok(res);
             }
+            catch (ArgumentException argumentException)
+            {
+                return Results.BadRequest(argumentException.Message);
+            }
             catch (ValidationException validationException)
             {
                 logger.LogError(validationException, validationException.Message);
@@ -75,6 +81,10 @@ namespace MinimalApiTemplate.Handlers
                 }
 
                 return Results.Ok(res);
+            }
+            catch (ArgumentException argumentException)
+            {
+                return Results.BadRequest(argumentException.Message);
             }
             catch (ValidationException validationException)
             {

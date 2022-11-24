@@ -76,17 +76,27 @@ builder.Services.AddProblemDetails(options =>
 builder.Services.AddDbContext<GenericContext>(options =>
 {
     options.UseInMemoryDatabase("GenericDb");
-    if (builder.Environment.IsDevelopment())
-    {
-        options.LogTo(Console.WriteLine);
-        options.EnableSensitiveDataLogging();
-    }
+    //if (builder.Environment.IsDevelopment())
+    //{
+    //    options
+    //        .LogTo(m => logger.Debug(m))
+    //        .EnableSensitiveDataLogging();
+    //}
 });
+
 builder.Services.AddScoped<IPeopleService, PeopleService>();
 builder.Services.AddScoped<ICityService, CityService>();
 
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    using (var dbcontext = scope.ServiceProvider.GetService<GenericContext>())
+    dbcontext!.Database.EnsureCreated();
+}
+
 
 //Cors
 app.UseCors(builder => builder

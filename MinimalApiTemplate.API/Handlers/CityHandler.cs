@@ -22,12 +22,15 @@ namespace MinimalApiTemplate.Handlers
                 .Accepts<City>(MediaTypeNames.Application.Json)
                 .Produces<Guid>(statusCode: StatusCodes.Status200OK)
                 .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status500InternalServerError);
 
             app.MapPut("/api/city/{id:guid}", UpdateAsync)
                 .Accepts<City>(MediaTypeNames.Application.Json)
                 .Produces<Guid>(statusCode: StatusCodes.Status200OK)
                 .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status404NotFound)
                 .Produces(StatusCodes.Status500InternalServerError);
 
             app.MapDelete("/api/city/{id:guid}", DeleteAsync)
@@ -56,6 +59,10 @@ namespace MinimalApiTemplate.Handlers
                 var res = await cityService.InsertAsync(city: city);
                 return Results.Ok(res);
             }
+            catch (ArgumentException argumentException)
+            {
+                return Results.BadRequest(argumentException.Message);
+            }
             catch (ValidationException validationException)
             {
                 return Results.ValidationProblem(validationException.ToDictionary());
@@ -66,7 +73,17 @@ namespace MinimalApiTemplate.Handlers
         {
             try
             {
-                return await Task.FromResult(Results.NoContent());
+                var res = await cityService.UpdateAsync(id: id, city: city);
+                if (res is null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(res);
+            }
+            catch (ArgumentException argumentException)
+            {
+                return Results.BadRequest(argumentException.Message);
             }
             catch (ValidationException validationException)
             {

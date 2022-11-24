@@ -8,5 +8,6 @@ namespace MinimapApiTemplate.BLL.Services
         Task<IEnumerable<City>> GetListAsync();
         Task<Guid> InsertAsync(City city);
         Task<int> DeleteAsync(Guid id);
+        Task<City> UpdateAsync(Guid id, City city);
     }
 }
