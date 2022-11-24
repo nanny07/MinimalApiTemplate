@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MinimapApiTemplate.BLL.Resources {
+namespace MinimalApiTemplate.BLL.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MinimapApiTemplate.BLL.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MinimapApiTemplate.BLL.Resources.Messagges", typeof(Messagges).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MinimalApiTemplate.BLL.Resources.Messagges", typeof(Messagges).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,42 @@ namespace MinimapApiTemplate.BLL.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id can&apos;t be empty.
+        /// </summary>
+        internal static string IdCanNotBeEmpty {
+            get {
+                return ResourceManager.GetString("IdCanNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same city already exists.
+        /// </summary>
+        internal static string SameCityExists {
+            get {
+                return ResourceManager.GetString("SameCityExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same person already exists.
+        /// </summary>
+        internal static string SamePersonExists {
+            get {
+                return ResourceManager.GetString("SamePersonExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified Id isn&apos;t the same of the {0}.Id.
+        /// </summary>
+        internal static string SpecifiedIdNotTheSame {
+            get {
+                return ResourceManager.GetString("SpecifiedIdNotTheSame", resourceCulture);
             }
         }
         

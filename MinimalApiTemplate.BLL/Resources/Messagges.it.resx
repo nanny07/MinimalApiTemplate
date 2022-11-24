@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="IdCanNotBeEmpty" xml:space="preserve">
+    <value>Id non può essere vuoto</value>
+  </data>
+  <data name="SameCityExists" xml:space="preserve">
+    <value>La città esiste già</value>
+  </data>
+  <data name="SamePersonExists" xml:space="preserve">
+    <value>La persona esiste già</value>
+  </data>
+  <data name="SpecifiedIdNotTheSame" xml:space="preserve">
+    <value>L'Id specificato non è lo stesso di {0}.Id</value>
+  </data>
   <data name="UpdateError" xml:space="preserve">
     <value>Si è riscontrato un errore durante l'aggiornamento</value>
   </data>

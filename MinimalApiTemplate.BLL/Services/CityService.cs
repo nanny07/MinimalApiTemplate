@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MinimalApiTemplate.BLL.Resources;
 using MinimalApiTemplate.DAL;
 using MinimapApiTemplate.BLL.Services.Common;
 using MinimapApiTemplate.Shared.Model;
@@ -33,7 +34,7 @@ namespace MinimapApiTemplate.BLL.Services
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentException("Id can't be empty");
+                throw new ArgumentException(Messagges.IdCanNotBeEmpty);
             }
 
             var dbCity = await dataContext.Cities.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
@@ -62,7 +63,7 @@ namespace MinimapApiTemplate.BLL.Services
 
             if (alreadyExists)
             {
-                throw new ArgumentException("The same person already exists");
+                throw new ArgumentException(Messagges.SameCityExists);
             }
 
             var dbCity = new DAL.Model.City() { Name = city.Name, State = city.State };
@@ -87,12 +88,12 @@ namespace MinimapApiTemplate.BLL.Services
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentException("Id can't be empty");
+                throw new ArgumentException(Messagges.IdCanNotBeEmpty);
             }
 
             if (id != city.Id)
             {
-                throw new ArgumentException("The specified Id isn't the same of the City.Id");
+                throw new ArgumentException(string.Format(Messagges.SpecifiedIdNotTheSame, "City"));
             }
 
             var validationResult = await validator.ValidateAsync(city);
