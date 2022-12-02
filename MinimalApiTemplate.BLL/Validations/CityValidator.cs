@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using MinimapApiTemplate.BLL.Model;
+using MinimapApiTemplate.Shared.Model;
 
 namespace MinimapApiTemplate.BLL.Validations
 {

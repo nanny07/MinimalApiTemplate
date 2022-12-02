@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MinimalApiTemplate.API.Helpers;
 using MinimalApiTemplate.Routing;
-using MinimapApiTemplate.BLL.Model;
 using MinimapApiTemplate.BLL.Services;
+using MinimapApiTemplate.Shared.Model;
 using System.Net.Mime;
 
 namespace MinimalApiTemplate.Handlers
@@ -22,6 +22,7 @@ namespace MinimalApiTemplate.Handlers
                 .Accepts<Person>(MediaTypeNames.Application.Json)
                 .Produces<Guid>(statusCode: StatusCodes.Status200OK)
                 .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status404NotFound)
                 .Produces(StatusCodes.Status500InternalServerError);
 
@@ -29,6 +30,7 @@ namespace MinimalApiTemplate.Handlers
                 .Accepts<Person>(MediaTypeNames.Application.Json)
                 .Produces<Guid>(statusCode: StatusCodes.Status200OK)
                 .ProducesValidationProblem(StatusCodes.Status400BadRequest)
+                .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status500InternalServerError);
 
             app.MapDelete("/api/people/{id:guid}", DeleteAsync)
@@ -50,12 +52,19 @@ namespace MinimalApiTemplate.Handlers
             return Results.Ok(person);
         }
 
-        private async Task<IResult> InsertAsync(Person person, IPeopleService peopleService, IValidator<Person> personValidator, ILogger<PersonHandler> logger)
+        private async Task<IResult> InsertAsync(Person person
+            , IPeopleService peopleService
+            , IValidator<Person> personValidator
+            , ILogger<PersonHandler> logger)
         {
             try
             {
                 var res = await peopleService.InsertAsync(person: person);
                 return Results.Ok(res);
+            }
+            catch (ArgumentException argumentException)
+            {
+                return Results.BadRequest(argumentException.Message);
             }
             catch (ValidationException validationException)
             {
@@ -75,6 +84,10 @@ namespace MinimalApiTemplate.Handlers
                 }
 
                 return Results.Ok(res);
+            }
+            catch (ArgumentException argumentException)
+            {
+                return Results.BadRequest(argumentException.Message);
             }
             catch (ValidationException validationException)
             {

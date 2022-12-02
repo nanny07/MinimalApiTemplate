@@ -19,6 +19,18 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    "DevTunnel": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "devTunnelEnabled": true,
+      "devTunnelAccess": "public",
+      "applicationUrl": "https://localhost:7246;http://localhost:5246",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
