@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MinimalApiTemplate.BLL.Resources;
@@ -14,8 +16,8 @@ namespace MinimapApiTemplate.BLL.Services
         private readonly ILogger<PeopleService> logger;
         private readonly IValidator<Person> validator;
 
-        public PeopleService(GenericContext dataContext, ILogger<PeopleService> logger, IValidator<Person> validator) 
-            : base(dataContext, logger)
+        public PeopleService(GenericContext dataContext, ILogger<PeopleService> logger, IValidator<Person> validator, IMapper mapper)
+            : base(dataContext, logger, mapper)
         {
             this.dataContext = dataContext;
             this.logger = logger;
@@ -24,9 +26,7 @@ namespace MinimapApiTemplate.BLL.Services
 
         public async Task<IEnumerable<Person>> GetListAsync()
         {
-            var peopleDbList = await dataContext.People.AsNoTracking().ToListAsync();
-            var peopleList = peopleDbList.Select(p => new Person() { Id = p.Id, FirstName = p.FirstName, LastName = p.LastName });
-
+            var peopleList = await dataContext.People.AsNoTracking().ProjectTo<Person>(mapper.ConfigurationProvider).ToListAsync();
             return peopleList;
         }
 
@@ -37,13 +37,12 @@ namespace MinimapApiTemplate.BLL.Services
                 throw new ArgumentException(Messagges.IdCanNotBeEmpty);
             }
 
-            var dbPerson = await dataContext.People.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
-            if (dbPerson is null) 
+            var person = await dataContext.People.AsNoTracking().ProjectTo<Person>(mapper.ConfigurationProvider).FirstOrDefaultAsync(p => p.Id == id);
+            if (person is null)
             {
                 return null;
             }
 
-            var person = new Person() { Id = dbPerson.Id, FirstName = dbPerson.FirstName, LastName = dbPerson.LastName };
             return person;
         }
 
@@ -59,29 +58,31 @@ namespace MinimapApiTemplate.BLL.Services
                 p.FirstName.Equals(person.FirstName, StringComparison.InvariantCultureIgnoreCase)
                 && p.LastName.Equals(person.LastName, StringComparison.InvariantCultureIgnoreCase)
             );
-            
+
             if (alreadyExists)
             {
                 throw new ArgumentException(Messagges.SamePersonExists);
             }
 
-            var dbPerson = new DAL.Model.Person() { FirstName = person.FirstName, LastName = person.LastName };
+            var dbPerson = mapper.Map<DAL.Model.Person>(person);
 
             await dataContext.People.AddAsync(dbPerson);
 
-            return await Task.FromResult(Guid.NewGuid());
+            await dataContext.SaveChangesAsync();
+
+            return dbPerson.Id;
         }
 
         public async Task<Person> UpdateAsync(Guid id, Person person)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 throw new ArgumentException(Messagges.IdCanNotBeEmpty);
             }
 
             if (id != person.Id)
             {
-                throw new ArgumentException(string.Format(Messagges.SpecifiedIdNotTheSame, "Person"));
+                throw new ArgumentException(string.Format(Messagges.SpecifiedIdNotTheSame, person.GetType().Name));
             }
 
             var validationResult = await validator.ValidateAsync(person);

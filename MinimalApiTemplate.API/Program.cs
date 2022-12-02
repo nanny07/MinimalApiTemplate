@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MinimalApiTemplate.API.Helpers;
 using MinimalApiTemplate.API.Swagger;
+using MinimalApiTemplate.BLL.MapperProfiles;
 using MinimalApiTemplate.DAL;
 using MinimalApiTemplate.Routing;
 using MinimapApiTemplate.BLL.Services;
@@ -73,6 +74,8 @@ builder.Services.AddProblemDetails(options =>
 });
 
 //Other Services
+builder.Services.AddAutoMapper(typeof(PersonProfile).Assembly);
+
 builder.Services.AddDbContext<GenericContext>(options =>
 {
     options.UseInMemoryDatabase("GenericDb");
@@ -94,7 +97,7 @@ if (app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
     using (var dbcontext = scope.ServiceProvider.GetService<GenericContext>())
-    dbcontext!.Database.EnsureCreated();
+        dbcontext!.Database.EnsureCreated();
 }
 
 

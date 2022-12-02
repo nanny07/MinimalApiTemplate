@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MinimalApiTemplate.API.Helpers;
 using MinimalApiTemplate.Routing;
-using MinimapApiTemplate.Shared.Model;
 using MinimapApiTemplate.BLL.Services;
+using MinimapApiTemplate.Shared.Model;
 using System.Net.Mime;
 
 namespace MinimalApiTemplate.Handlers
@@ -52,7 +52,10 @@ namespace MinimalApiTemplate.Handlers
             return Results.Ok(person);
         }
 
-        private async Task<IResult> InsertAsync(Person person, IPeopleService peopleService, IValidator<Person> personValidator, ILogger<PersonHandler> logger)
+        private async Task<IResult> InsertAsync(Person person
+            , IPeopleService peopleService
+            , IValidator<Person> personValidator
+            , ILogger<PersonHandler> logger)
         {
             try
             {

@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MinimalApiTemplate.BLL.Resources;
@@ -14,8 +16,8 @@ namespace MinimapApiTemplate.BLL.Services
         private readonly ILogger<CityService> logger;
         private readonly IValidator<City> validator;
 
-        public CityService(GenericContext dataContext, ILogger<CityService> logger, IValidator<City> validator)
-            : base(dataContext, logger)
+        public CityService(GenericContext dataContext, ILogger<CityService> logger, IValidator<City> validator, IMapper mapper)
+            : base(dataContext, logger, mapper)
         {
             this.dataContext = dataContext;
             this.logger = logger;
@@ -24,9 +26,7 @@ namespace MinimapApiTemplate.BLL.Services
 
         public async Task<IEnumerable<City>> GetListAsync()
         {
-            var dbCities = await dataContext.Cities.AsNoTracking().ToListAsync();
-            var cities = dbCities.Select(c => new City() { Id = c.Id, Name = c.Name, State = c.State }).ToList();
-
+            var cities = await dataContext.Cities.AsNoTracking().ProjectTo<City>(mapper.ConfigurationProvider).ToListAsync();
             return cities;
         }
 
@@ -37,15 +37,13 @@ namespace MinimapApiTemplate.BLL.Services
                 throw new ArgumentException(Messagges.IdCanNotBeEmpty);
             }
 
-            var dbCity = await dataContext.Cities.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
-            if(dbCity is null)
+            var city = await dataContext.Cities.AsNoTracking().ProjectTo<City>(mapper.ConfigurationProvider).FirstOrDefaultAsync(c => c.Id == id);
+            if (city is null)
             {
                 return null;
             }
 
-            var city = new City() { Id = dbCity.Id, Name = dbCity.Name, State = dbCity.State };
-
-            return await Task.FromResult(city);
+            return city;
         }
 
         public async Task<Guid> InsertAsync(City city)
@@ -66,10 +64,13 @@ namespace MinimapApiTemplate.BLL.Services
                 throw new ArgumentException(Messagges.SameCityExists);
             }
 
-            var dbCity = new DAL.Model.City() { Name = city.Name, State = city.State };
+            var dbCity = mapper.Map<DAL.Model.City>(city);
+
             await dataContext.Cities.AddAsync(dbCity);
 
-            return await Task.FromResult(Guid.NewGuid());
+            await dataContext.SaveChangesAsync();
+
+            return dbCity.Id;
         }
 
         public async Task<int> DeleteAsync(Guid id)
@@ -93,7 +94,7 @@ namespace MinimapApiTemplate.BLL.Services
 
             if (id != city.Id)
             {
-                throw new ArgumentException(string.Format(Messagges.SpecifiedIdNotTheSame, "City"));
+                throw new ArgumentException(string.Format(Messagges.SpecifiedIdNotTheSame, city.GetType().Name));
             }
 
             var validationResult = await validator.ValidateAsync(city);
